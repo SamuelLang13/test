@@ -9,21 +9,13 @@
 #endif /* __PROGTEST__ */
 
 
-typedef struct Domino
-{
-  size_t arrayLength=0;
-  char nameOfDomino[0];
-  int sum1;
-  int sum2;
-}DOMINO;
-
 int countCollectible ( const char * list )
 {
+  if(list==NULL)
+  {
+    return 0;
+  }
   int endOfReading=0;
-  size_t array_Lenght=0;
-  DOMINO*data=NULL;
-  int maxOfData=100;
-  int dataCnt=0;
   int side1_num1;
   int side1_num2;
   int side1_sum=0;
@@ -33,17 +25,19 @@ int countCollectible ( const char * list )
   int maxOfArray=100;
   int arrayCnt=0;
   char *nameOfDomino;
-  int tmpOfCnt=0;
   int stdinCnt=0;
-  int indexUntilEnd=0;
-
-  //Allocations of the array and struct
-  nameOfDomino=(int*)malloc(maxOfArray*sizeof(*nameOfDomino));
-  data=(DOMINO*)malloc(maxOfData*sizeof(*data));
+  int magicNumber=0;
+  char magiName[]="PA1 Basic";
+  int isContaining=0;
 
   //while loop until the end of the stdin
   while (list[stdinCnt]!='\0')
   {
+    //Allocations of the array and struct
+    if(list[stdinCnt]=='{')
+    {
+      nameOfDomino=(char*)malloc(maxOfArray*sizeof(*nameOfDomino));
+    }
     if(list[stdinCnt]=='\'')
     {
       arrayCnt=0;
@@ -62,38 +56,28 @@ int countCollectible ( const char * list )
         stdinCnt++;
         arrayCnt++;
       }
-      //Realloc for data
-      if(dataCnt>=maxOfData)
-      {
-        maxOfData=maxOfData+100;
-        data=(DOMINO*)realloc(data,maxOfData*sizeof(*data));
-      }
-      data->arrayLength=strlen(nameOfDomino);
-      data->nameOfDomino=(char*)calloc(data->arrayLength,sizeof(char));
-      strncpy(data[dataCnt].nameOfDomino,nameOfDomino,sizeof(data[dataCnt].nameOfDomino));
     }
     endOfReading=stdinCnt;
     stdinCnt++;
-    while (list[stdinCnt]=='}')
-    {
-      indexUntilEnd++;
-    }
 
     if(list[stdinCnt]=='[')
     {
-      sscanf((list+endOfReading)," %d %d %d %d ",&side1_num1,&side1_num2,&side2_num1,&side2_num2)
+      sscanf((list+endOfReading)," ; [ %d | %d ] ; [ %d | %d ] }",&side1_num1,&side1_num2,&side2_num1,&side2_num2);
+      side1_sum=side1_num1+side1_num2;
+      side2_sum=side2_num1+side2_num2;
+
+      if((side1_sum==53 && side2_sum!=53) || (side1_sum!=53 && side2_sum==53))
+      {
+        isContaining=strcmp(nameOfDomino,magiName);
+        if(isContaining==0)
+        {
+          magicNumber++;
+        }      
+      }   
     }
-    side1_sum=side1_num1+side1_num2;
-    side2_sum=side2_num1+side2_num2;
-
-
-
-
-
-
     free(nameOfDomino);
   }
-  return 0; 
+  return magicNumber; 
 }
 
 
@@ -144,6 +128,9 @@ int main ( void )
     "{'-fsanitize=address -g';[2|2];[2|2]}\n";
 
   assert ( countCollectible ( str1 ) == 0 );
+  assert (countCollectible (NULL) == 0 );
+  assert (countCollectible ("") == 0 );
+  assert (countCollectible ("{' ") == 0 );
 /*  assert ( countUnique ( str1 ) == 3 );
   assert ( countUnique ( str2 ) == 4 );
   assert ( countUnique ( str3 ) == 3 );
