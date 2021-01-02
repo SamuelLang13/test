@@ -45,6 +45,11 @@ int countCollectible ( const char * list )
       stdinCnt++;
       while (list[stdinCnt]!=39 && read!=1)
       {
+        if(list[stdinCnt+1]=='\0')
+        {
+          free(nameOfDomino);
+          return 0;
+        }
         if(arrayCnt>=maxOfArray)
         {
           maxOfArray=maxOfArray+100;
@@ -57,7 +62,7 @@ int countCollectible ( const char * list )
       endOfReading=stdinCnt;
       isContaining=strcmp(nameOfDomino,magicName);
       free(nameOfDomino);
-      sscanf((list+endOfReading)," ; [ %d | %d ] ; [ %d | %d ] }",&side1_num1,&side1_num2,&side2_num1,&side2_num2);
+      sscanf((list+endOfReading),"' ; [ %d | %d ] ; [ %d | %d ] }",&side1_num1,&side1_num2,&side2_num1,&side2_num2);
       side1_sum=side1_num1+side1_num2;
       side2_sum=side2_num1+side2_num2;
       if((side1_sum==53 && side2_sum!=53) || (side1_sum!=53 && side2_sum==53))
