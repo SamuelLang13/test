@@ -26,20 +26,17 @@ int countCollectible ( const char * list )
   int arrayCnt=0;
   char *nameOfDomino;
   int stdinCnt=0;
-  int magicNumber=0;
-  char magiName[]="PA1 Basic";
+  int magicNumberCnt=0;
+  char magicName[]="PA1 Basic";
   int isContaining=0;
 
   //while loop until the end of the stdin
   while (list[stdinCnt]!='\0')
   {
-    //Allocations of the array and struct
-    if(list[stdinCnt]=='{')
-    {
-      nameOfDomino=(char*)malloc(maxOfArray*sizeof(*nameOfDomino));
-    }
+
     if(list[stdinCnt]=='\'')
     {
+      nameOfDomino=(char*)malloc(maxOfArray*sizeof(*nameOfDomino));
       arrayCnt=0;
       maxOfArray=100;
       stdinCnt++;
@@ -56,6 +53,8 @@ int countCollectible ( const char * list )
         stdinCnt++;
         arrayCnt++;
       }
+      isContaining=strcmp(nameOfDomino,magicName);
+      free(nameOfDomino);
     }
     endOfReading=stdinCnt;
     stdinCnt++;
@@ -68,16 +67,14 @@ int countCollectible ( const char * list )
 
       if((side1_sum==53 && side2_sum!=53) || (side1_sum!=53 && side2_sum==53))
       {
-        isContaining=strcmp(nameOfDomino,magiName);
         if(isContaining==0)
         {
-          magicNumber++;
+          magicNumberCnt++;
         }      
       }   
     }
-    free(nameOfDomino);
   }
-  return magicNumber; 
+  return magicNumberCnt; 
 }
 
 
@@ -102,7 +99,8 @@ int main ( void )
   const char * str1 =
     " { 'Progtest Exam' ; [ 1 | 2 ] ; [ 3 | 4 ] }{'PA1 2020/2021';[2|2];[3|1]}\n"
     "{'Progtest Exam' ; [ 2 | 1 ] ; [ 3 | 4 ] }\n"
-    "{'Progtest Exam' ; [ 2 | 3 ] ; [ 1 | 4 ] }\n";
+    "{'Progtest Exam' ; [ 2 | 3 ] ; [ 1 | 4 ] }\n"
+    "{'PA1 Basic' ; [ 1 | 56 ] ; [ 1 | 4 ] }\n";
   const char * str2 =
     "{'Crash';  [1|2];[3|4]}\n"
     "{'MemLeak';[1|2];[3|4]}\n"
@@ -127,10 +125,11 @@ int main ( void )
     "{'-fsanitize=address -g';[3|9];[2|6]}\n"
     "{'-fsanitize=address -g';[2|2];[2|2]}\n";
 
-  assert ( countCollectible ( str1 ) == 0 );
+  assert ( countCollectible ( str1 ) == 1 );
   assert (countCollectible (NULL) == 0 );
   assert (countCollectible ("") == 0 );
   assert (countCollectible ("{' ") == 0 );
+
 /*  assert ( countUnique ( str1 ) == 3 );
   assert ( countUnique ( str2 ) == 4 );
   assert ( countUnique ( str3 ) == 3 );
