@@ -43,7 +43,7 @@ int countCollectible ( const char * list )
       maxOfArray=100;
       nameOfDomino=(char*)malloc(maxOfArray*sizeof(*nameOfDomino));
       stdinCnt++;
-      while (list[stdinCnt]!=39)
+      while (list[stdinCnt]!=39 && read!=1)
       {
         if(arrayCnt>=maxOfArray)
         {
