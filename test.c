@@ -29,50 +29,57 @@ int countCollectible ( const char * list )
   int magicNumberCnt=0;
   char magicName[]="PA1 Basic";
   int isContaining=0;
+  int cntUntilEnd=0;
+  int read=0;
 
   //while loop until the end of the stdin
   while (list[stdinCnt]!='\0')
   {
-
-    if(list[stdinCnt]=='\'')
+    read=0;
+    if(list[stdinCnt]==39)
     {
-      nameOfDomino=(char*)malloc(maxOfArray*sizeof(*nameOfDomino));
+      isContaining=0;
       arrayCnt=0;
       maxOfArray=100;
+      nameOfDomino=(char*)malloc(maxOfArray*sizeof(*nameOfDomino));
       stdinCnt++;
-      while (list[stdinCnt]!='\'')
+      while (list[stdinCnt]!=39)
       {
-        //Realloc for array
         if(arrayCnt>=maxOfArray)
         {
           maxOfArray=maxOfArray+100;
           nameOfDomino=(char*)realloc(nameOfDomino,maxOfArray*sizeof(*nameOfDomino));
         }
-        //copying characters into array
         nameOfDomino[arrayCnt]=list[stdinCnt];
         stdinCnt++;
         arrayCnt++;
       }
+      endOfReading=stdinCnt;
       isContaining=strcmp(nameOfDomino,magicName);
       free(nameOfDomino);
-    }
-    endOfReading=stdinCnt;
-    stdinCnt++;
-
-    if(list[stdinCnt]=='[')
-    {
       sscanf((list+endOfReading)," ; [ %d | %d ] ; [ %d | %d ] }",&side1_num1,&side1_num2,&side2_num1,&side2_num2);
       side1_sum=side1_num1+side1_num2;
       side2_sum=side2_num1+side2_num2;
-
       if((side1_sum==53 && side2_sum!=53) || (side1_sum!=53 && side2_sum==53))
       {
         if(isContaining==0)
         {
           magicNumberCnt++;
-        }      
-      }   
+        }       
+      }
+      while (list[stdinCnt]=='}')
+      {
+        cntUntilEnd++;
+      }
+      read=1;
+      
+      stdinCnt=cntUntilEnd+stdinCnt;
     }
+    if(read==0)
+    {
+      stdinCnt++;
+    }
+
   }
   return magicNumberCnt; 
 }
@@ -100,7 +107,7 @@ int main ( void )
     " { 'Progtest Exam' ; [ 1 | 2 ] ; [ 3 | 4 ] }{'PA1 2020/2021';[2|2];[3|1]}\n"
     "{'Progtest Exam' ; [ 2 | 1 ] ; [ 3 | 4 ] }\n"
     "{'Progtest Exam' ; [ 2 | 3 ] ; [ 1 | 4 ] }\n"
-    "{'PA1 Basic' ; [ 1 | 56 ] ; [ 1 | 4 ] }\n";
+    "{'PA1 Basic' ; [ 1 | 52 ] ; [ 1 | 4 ] }\n";
   const char * str2 =
     "{'Crash';  [1|2];[3|4]}\n"
     "{'MemLeak';[1|2];[3|4]}\n"
