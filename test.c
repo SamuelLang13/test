@@ -36,7 +36,7 @@ int countCollectible ( const char * list )
   while (list[stdinCnt]!='\0')
   {
     read=0;
-    if(list[stdinCnt]==39)
+    if(list[stdinCnt]==39 && read!=1)
     {
       isContaining=0;
       arrayCnt=0;
