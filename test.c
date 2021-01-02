@@ -11,6 +11,7 @@
 
 typedef struct Domino
 {
+  size_t arrayLength=0;
   char nameOfDomino[0];
   int sum1;
   int sum2;
@@ -18,47 +19,80 @@ typedef struct Domino
 
 int countCollectible ( const char * list )
 {
+  int endOfReading=0;
+  size_t array_Lenght=0;
   DOMINO*data=NULL;
   int maxOfData=100;
   int dataCnt=0;
   int side1_num1;
   int side1_num2;
+  int side1_sum=0;
   int side2_num1;
   int side2_num2;
+  int side2_sum=0;
   int maxOfArray=100;
   int arrayCnt=0;
   char *nameOfDomino;
   int tmpOfCnt=0;
-  //Allocations of the array
-  nameOfDomino=(int*)malloc(maxOfArray*sizeof(int));
   int stdinCnt=0;
+  int indexUntilEnd=0;
+
+  //Allocations of the array and struct
+  nameOfDomino=(int*)malloc(maxOfArray*sizeof(*nameOfDomino));
+  data=(DOMINO*)malloc(maxOfData*sizeof(*data));
 
   //while loop until the end of the stdin
   while (list[stdinCnt]!='\0')
   {
     if(list[stdinCnt]=='\'')
     {
-      while (list[stdinCnt]=='\'')
+      arrayCnt=0;
+      maxOfArray=100;
+      stdinCnt++;
+      while (list[stdinCnt]!='\'')
       {
+        //Realloc for array
         if(arrayCnt>=maxOfArray)
         {
           maxOfArray=maxOfArray+100;
-          nameOfDomino=(int*)realloc()
+          nameOfDomino=(char*)realloc(nameOfDomino,maxOfArray*sizeof(*nameOfDomino));
         }
+        //copying characters into array
         nameOfDomino[arrayCnt]=list[stdinCnt];
         stdinCnt++;
         arrayCnt++;
       }
-      
+      //Realloc for data
+      if(dataCnt>=maxOfData)
+      {
+        maxOfData=maxOfData+100;
+        data=(DOMINO*)realloc(data,maxOfData*sizeof(*data));
+      }
+      data->arrayLength=strlen(nameOfDomino);
+      data->nameOfDomino=(char*)calloc(data->arrayLength,sizeof(char));
+      strncpy(data[dataCnt].nameOfDomino,nameOfDomino,sizeof(data[dataCnt].nameOfDomino));
     }
+    endOfReading=stdinCnt;
+    stdinCnt++;
+    while (list[stdinCnt]=='}')
+    {
+      indexUntilEnd++;
+    }
+
+    if(list[stdinCnt]=='[')
+    {
+      sscanf((list+endOfReading)," %d %d %d %d ",&side1_num1,&side1_num2,&side2_num1,&side2_num2)
+    }
+    side1_sum=side1_num1+side1_num2;
+    side2_sum=side2_num1+side2_num2;
+
+
+
+
+
+
+    free(nameOfDomino);
   }
-  
-
-
-
-
-
-
   return 0; 
 }
 
